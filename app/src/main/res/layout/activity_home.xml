@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.faisal.myapplication.Home">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_header_id"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/tv_header_id"
+            android:src="@drawable/logo1" />
+
+        <TextView
+            android:id="@+id/tv_header_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="left|center_vertical"
+            android:padding="10dp"
+            android:text="Home"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_margin="5dp"
+        android:hint="Search (by car name, Price and rating"
+        android:textSize="16dp" />
+
+    <ListView
+        android:id="@+id/lv_cars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom"
+        android:layout_below="@+id/et_search" />
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_total_cars_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Cars :"
+                android:textSize="15dp"
+                android:layout_alignParentLeft="true"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_total_cars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_total_cars_title"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/tv_total_api_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="API hits :"
+                android:textSize="15dp"
+                android:layout_toLeftOf="@+id/tv_total_api"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_total_api"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="15dp"
+                android:text="Sort by" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="2.0"
+                android:padding="3dp"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btn_price"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:textSize="12dp"
+                    android:layout_height="wrap_content"
+                    android:text="Price/Hr" />
+                <Button
+                    android:id="@+id/btn_rating"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:textSize="12dp"
+                    android:layout_height="wrap_content"
+                    android:text="Rating" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+        
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,209 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.faisal.myapplication.DetailActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_header_id"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/tv_header_id"
+            android:src="@drawable/logo1" />
+
+        <TextView
+            android:id="@+id/tv_header_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="left|center_vertical"
+            android:padding="10dp"
+            android:text="Booking detail"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/car_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/header">
+
+        <ImageView
+            android:id="@+id/img_car"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_margin="3dp"
+            android:src="@drawable/blank" />
+
+        <TextView
+            android:id="@+id/tv_car_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_car"
+            android:text="Nano"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_per_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_car_name"
+            android:layout_below="@+id/tv_car_name"
+            android:text="70 per hr"
+            android:textSize="18dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="@style/CustomRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:isIndicator="true"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_per_hour"
+            android:layout_alignTop="@+id/tv_per_hour"
+            android:layout_below="@+id/tv_car_name"
+            android:layout_toRightOf="@+id/tv_per_hour" />
+        <TextView
+            android:id="@+id/tv_seater_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_car_name"
+            android:layout_below="@+id/tv_per_hour"
+            android:text="Seater :"
+            android:textSize="22dp" />
+        <TextView
+            android:id="@+id/tv_seater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_seater_header"
+            android:layout_below="@+id/tv_per_hour"
+            android:text="3+1"
+            android:textSize="22dp" />
+        <TextView
+            android:id="@+id/tv_ac_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_car_name"
+            android:layout_below="@+id/tv_seater_header"
+            android:text="AC :"
+            android:textSize="22dp" />
+        <TextView
+            android:id="@+id/tv_ac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_ac_header"
+            android:layout_below="@+id/tv_seater_header"
+            android:text="Yes"
+            android:textSize="22dp" />
+    </RelativeLayout>
+    <fragment
+        android:id="@+id/map"
+        android:layout_below="@+id/car_detail"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_above="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_pick_time_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Pickup date"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDate"
+                android:editable="false"
+                android:minEms="5"
+                android:drawableRight="@android:drawable/ic_menu_my_calendar"
+                android:layout_below="@id/tv_pick_time_header"/>
+
+
+
+            <Button
+                android:id="@+id/btn_booking_history"
+                android:layout_width="wrap_content"
+                android:text="Booking History"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="15dp" />
+            <Button
+                android:id="@+id/btn_book"
+                android:layout_below="@+id/btn_booking_history"
+                android:layout_width="wrap_content"
+                android:text="Book now"
+                android:layout_alignLeft="@+id/btn_booking_history"
+                android:layout_alignRight="@+id/btn_booking_history"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="15dp" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Back"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:weightSum="2.0">
+
+                <Button
+                    android:id="@+id/btn_sms"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:text="SMS"
+                    android:textSize="12dp" />
+
+                <Button
+                    android:id="@+id/btn_share"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:text="Share"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ZoomCar Hack</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_booking_history">BookingHistory</string>
+    <string name="key">AIzaSyCIPLY9kASXBJQ0u9w0nDhupzaCVDD8lj0</string>
+</resources>
