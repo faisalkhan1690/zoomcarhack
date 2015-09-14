@@ -99,6 +99,7 @@ public class DetailActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 finish();
             }
+
         });
         btnBookingHistory.setOnClickListener(new View.OnClickListener() {
             @Override
