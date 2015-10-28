@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.faisal.myapplication.model.CarModel;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -16,7 +17,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +26,9 @@ public class CarListAdapter extends BaseAdapter {
 
     private  LayoutInflater inflater;
     private  Context context;
-    private List<CarModel> list;
+    private List<CarModel.CarDetail> list;
 
-    public CarListAdapter(List<CarModel> list, Context context){
+    public CarListAdapter(List<CarModel.CarDetail> list, Context context){
         this.list=list;
         this.context=context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -55,7 +55,7 @@ public class CarListAdapter extends BaseAdapter {
     }
 
     @Override
-    public CarModel getItem(int position) {
+    public CarModel.CarDetail getItem(int position) {
         return list.get(position);
     }
 

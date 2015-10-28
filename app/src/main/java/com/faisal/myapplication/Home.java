@@ -2,34 +2,27 @@ package com.faisal.myapplication;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
+
+import com.faisal.myapplication.callback.IAsynTaskCallBack;
+import com.faisal.myapplication.constant.AppConstant;
+import com.faisal.myapplication.model.ApiHitModel;
+import com.faisal.myapplication.model.CarModel;
+import com.faisal.myapplication.model.JSONRoot;
+import com.faisal.myapplication.utill.MyAppAsyncTask;
+
 import java.util.ArrayList;
 import java.util.Collections;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.util.HashMap;
 
 public class Home extends AppCompatActivity {
 
@@ -43,8 +36,8 @@ public class Home extends AppCompatActivity {
     private Button btnPrice;
     private Button btnRating;
 
-    private ArrayList<CarModel> listData;
-    private ArrayList<CarModel> listDataTemp;
+    private ArrayList<CarModel.CarDetail> listData;
+    private ArrayList<CarModel.CarDetail> listDataTemp;
 
 
     @Override
@@ -52,22 +45,10 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        lvCars = (ListView) findViewById(R.id.lv_cars);
-        tvHeader = (TextView) findViewById(R.id.tv_header_id);
-        etSearch = (EditText) findViewById(R.id.et_search);
-        tvTotalCars = (TextView) findViewById(R.id.tv_total_cars);
-        tvTotalApi = (TextView) findViewById(R.id.tv_total_api);
-        btnSort = (Button) findViewById(R.id.btn_sort);
-        btnPrice = (Button) findViewById(R.id.btn_price);
-        btnRating = (Button) findViewById(R.id.btn_rating);
+        initialization();
 
-        listData = new ArrayList<CarModel>();
-        listDataTemp = new ArrayList<CarModel>();
-        adapter = new CarListAdapter(listDataTemp, Home.this);
-        lvCars.setAdapter(adapter);
-
-        new fetchData().execute();
-        new fetchData1().execute();
+        fetchCarData();
+        fetchApiHits();
 
         btnPrice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +70,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Home.this, DetailActivity.class);
-                intent.putExtra("model", listDataTemp.get(position));
+                intent.putExtra(AppConstant.MODEL, listDataTemp.get(position));
                 startActivity(intent);
             }
         });
@@ -105,23 +86,22 @@ public class Home extends AppCompatActivity {
 
                 listDataTemp.clear();
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     listDataTemp.addAll(listData);
                     adapter.notifyDataSetChanged();
-                }else{
-                    for (CarModel model: listData) {
-                        if(model.getName().toString().toLowerCase().contains(s.toString().toLowerCase())){
+                } else {
+                    for (CarModel.CarDetail model : listData) {
+                        if (model.getName().toString().toLowerCase().contains(s.toString().toLowerCase())) {
                             listDataTemp.add(model);
-                        }else if((model.getRating()+"").contains(s.toString())){
+                        } else if ((model.getRating() + "").contains(s.toString())) {
                             listDataTemp.add(model);
-                        }else if((model.getHourly_rate()+"").contains(s.toString())){
+                        } else if ((model.getHourly_rate() + "").contains(s.toString())) {
                             listDataTemp.add(model);
                         }
                     }
                     adapter.notifyDataSetChanged();
 
                 }
-
             }
 
             @Override
@@ -133,114 +113,72 @@ public class Home extends AppCompatActivity {
 
     }
 
+    private void initialization() {
+        lvCars = (ListView) findViewById(R.id.lv_cars);
+        tvHeader = (TextView) findViewById(R.id.tv_header_id);
+        etSearch = (EditText) findViewById(R.id.et_search);
+        tvTotalCars = (TextView) findViewById(R.id.tv_total_cars);
+        tvTotalApi = (TextView) findViewById(R.id.tv_total_api);
+        btnSort = (Button) findViewById(R.id.btn_sort);
+        btnPrice = (Button) findViewById(R.id.btn_price);
+        btnRating = (Button) findViewById(R.id.btn_rating);
 
-    class fetchData extends AsyncTask<String, String, String> {
-
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(Home.this);
-            progressDialog.setTitle("Please Wait..");
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... f_url) {
-            try{
-                String murl="https://zoomcar.0x10.info/api/zoomcar?type=json&query=list_cars";
-                URL url = new URL(murl);
-                HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
-                InputStream ins = con.getInputStream();
-                InputStreamReader isr = new InputStreamReader(ins);
-                BufferedReader in = new BufferedReader(isr);
-                return in.readLine();
-            }catch (Exception e){
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        protected void onProgressUpdate(String... progress) {
-        }
-
-        @Override
-        protected void onPostExecute(String file_url) {
-
-            if(file_url==null){
-                return ;
-            }
-
-            try {
-                JSONObject mainObject = new JSONObject(file_url);
-                JSONArray carArray = mainObject.getJSONArray("cars");
-                for (int i = 0; i <carArray.length() ; i++) {
-                    CarModel model=new CarModel();
-                    JSONObject carObject=carArray.getJSONObject(i);
-                    model.setName(carObject.getString("name"));
-                    if(carObject.getInt("ac")==1){
-                        model.setAc(true);
-                    }else{
-                        model.setAc(false);
-                    }
-                    model.setHourly_rate(carObject.getInt("hourly_rate"));
-                    model.setImage(carObject.getString("image"));
-                    model.setRating(carObject.getInt("rating"));
-                    model.setSeater(carObject.getString("seater"));
-                    model.setType(carObject.getString("type"));
-                    JSONObject locationObject=carObject.getJSONObject("location");
-                    model.setLatitude(locationObject.getString("latitude"));
-                    model.setLongitude(locationObject.getString("longitude"));
-                    listData.add(model);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            tvTotalCars.setText(listData.size()+"");
-            listDataTemp.addAll(listData);
-            adapter.notifyDataSetChanged();
-            progressDialog.dismiss();
-        }
+        listData = new ArrayList<CarModel.CarDetail>();
+        listDataTemp = new ArrayList<CarModel.CarDetail>();
+        adapter = new CarListAdapter(listDataTemp, Home.this);
+        lvCars.setAdapter(adapter);
     }
 
+    private void fetchCarData() {
+        final ProgressDialog progressDialog = new ProgressDialog(Home.this);
+        progressDialog.setTitle("Please Wait..");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        new MyAppAsyncTask(new CarModel(), AppConstant.CAR_DETAILS, new HashMap<String, String>(), new IAsynTaskCallBack() {
+            @Override
+            public void responceFromAsynTask(final JSONRoot result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        if(result==null){
+                            return;
+                        }
+                        CarModel model=(CarModel)result;
+                        tvTotalCars.setText(model.getCars().size()+"");
+                        listDataTemp.addAll(model.getCars());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
-    class fetchData1 extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... f_url) {
-            String murl="http://zoomcar.0x10.info/api/zoomcar?type=json&query=api_hits";
-            String SetServerString = "";
-            HttpClient Client = new DefaultHttpClient();
-            try {
-                HttpGet httpget = new HttpGet(murl);
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                SetServerString = Client.execute(httpget, responseHandler);
-                Log.e("response", SetServerString);
-            } catch (Exception ex) {
-                ex.printStackTrace();
             }
-            return SetServerString;
-        }
+        }).execute();
+    }
 
+    private void fetchApiHits() {
 
-        @Override
-        protected void onPostExecute(String file_url) {
-
-            if(file_url==null){
-                return ;
+        final ProgressDialog progressDialog = new ProgressDialog(Home.this);
+        progressDialog.setTitle("Please Wait..");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        new MyAppAsyncTask(new ApiHitModel(), AppConstant.API_HIT_COUNT, new HashMap<String, String>(), new IAsynTaskCallBack() {
+            @Override
+            public void responceFromAsynTask(final JSONRoot result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        if(result==null){
+                            return;
+                        }
+                        ApiHitModel model = (ApiHitModel) result;
+                        tvTotalApi.setText(model.getApi_hits());
+                    }
+                });
             }
+        }).execute();
 
-            try {
-                JSONObject mainObject = new JSONObject(file_url);
-                tvTotalApi.setText(mainObject.getString("api_hits"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 }

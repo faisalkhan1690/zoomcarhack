@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,6 +16,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.faisal.myapplication.constant.AppConstant;
+import com.faisal.myapplication.model.CarModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity  {
     private Button btnShare;
     private Button btnSms;
     private Button btnBack;
-    private CarModel item;
+    private CarModel.CarDetail item;
     private GoogleMap googleMap;
     private ImageView imgCar;
     private TextView tvCarName;
@@ -60,7 +60,7 @@ public class DetailActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        item=(CarModel) getIntent().getSerializableExtra("model");
+        item=(CarModel.CarDetail) getIntent().getSerializableExtra(AppConstant.MODEL);
         btnBookingHistory=(Button)findViewById(R.id.btn_booking_history);
         btnBook=(Button)findViewById(R.id.btn_book);
         btnShare=(Button)findViewById(R.id.btn_share); 
@@ -150,7 +150,7 @@ public class DetailActivity extends AppCompatActivity  {
         ratingBar.setRating(item.getRating());
         ratingBar.setNumStars(5);
         tvSeater.setText(item.getSeater()+"+1");
-        if(item.isAc()){
+        if(item.getAc()==1){
             tvAc.setText("Yes");
         }else{
             tvAc.setText("No");
@@ -173,8 +173,8 @@ public class DetailActivity extends AppCompatActivity  {
                         "Sorry! unable to create maps", Toast.LENGTH_SHORT)
                         .show();
             } else {
-                double lat = Double.parseDouble(item.getLatitude());
-                double lon = Double.parseDouble(item.getLongitude());
+                double lat = Double.parseDouble(item.getLocation().getLatitude());
+                double lon = Double.parseDouble(item.getLocation().getLongitude());
                 LatLng addressLoc = new LatLng(lat, lon);
                 //googleMap.setTrafficEnabled(true);
                 googleMap.setMyLocationEnabled(true);
